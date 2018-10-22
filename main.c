@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <stdlib.h>>
+#include <stdlib.h>
 #include <string.h>
 
 
@@ -10,6 +10,60 @@ typedef struct Aluno
     char user[40];
     char pass[40];
 }aluno;
+
+carrega_disciplina(char disc[8])
+{
+    FILE * fp = fopen("Disciplinas.txt", "r");
+    char nome_disc[40];
+    char codigo_disc[8];
+    char dados[100];
+    char cred_disc[3];
+    int found = 0;
+    int i = 0;
+    char *token;
+
+    //Check para verificar se o arquivo foi aberto com sucesso
+    if (fp == NULL)
+   {
+      printf("Erro ao abrir o arquivo.\n");
+      exit(EXIT_FAILURE);
+   }
+
+      else
+    {
+
+         while(!feof(fp))
+            {
+                fgets(dados, 101, fp);
+
+                //Separando a string
+                token = strtok(dados, ",");
+                strcpy(codigo_disc,token);
+
+                if (strcmp(codigo_disc, disc) == 0)
+                {
+                    found++;
+                    while( token != NULL )
+                    {
+                        token = strtok(NULL, ",");
+                        if (i == 0) strcpy(nome_disc, token);
+                        if (i == 1) strcpy(cred_disc, token);
+                        i++;
+                    }
+                    printf("Nome: %s\n", nome_disc);
+                    printf("Quantidade de Creditos: %s\n", cred_disc);
+                    return 0;
+                 }
+            }
+            if (found == 0)
+            {
+                printf("\nCodigo nao encontrado!\n\n");
+                return 1;
+            }
+            else return 0;
+            fclose(fp);
+   }
+}
 
 int cadastra_aluno(){
     printf("---------------Menu Cadastro de Alunos-------------\n\n");
@@ -95,7 +149,9 @@ int login_sistema()
 
 int main()
 {
-    int op=0;
+	int op = 0;
+    char disc[8];
+	
      printf("-------- Bem vindo ao Sistema Academico --------\n\n");
      printf("                 Menu inicial\n");
      login_sistema();
@@ -121,9 +177,23 @@ int main()
             }
         case 2:
             {
-
-            break;
-
+            	
+                int erro = 1;
+                system("cls");
+                printf("Consultas de disciplinas: \n\n");
+                while (erro == 1)
+                {
+                    printf("Digite o codigo da disciplina: ");
+                    scanf("%s", disc);
+                    int i;
+                    for(i=0;i<strlen(disc);i++)
+                    {
+                        disc[i]=toupper(disc[i]);
+                    }
+                    erro = carrega_disciplina(disc);
+                }
+                 break;
+                
             }
         }
      }
