@@ -51,7 +51,8 @@ carrega_disciplina(char disc[8])
                         i++;
                     }
                     printf("Nome: %s\n", nome_disc);
-                    printf("Quantidade de Creditos: %s\n", cred_disc);
+                    printf("Quantidade de Creditos: %s", cred_disc);
+                    prerequisitos(codigo_disc);
                     return 0;
                  }
             }
@@ -64,6 +65,54 @@ carrega_disciplina(char disc[8])
             fclose(fp);
    }
 }
+
+void prerequisitos (char codigo[8]) {
+	FILE * fp = fopen("Prerequisitos.txt", "r");
+	char dados[100];
+	char codigo_disc[8];
+	char codigo_prereq[8];
+	int found = 0;
+	char *token;
+	int i = 0;
+	
+	if (fp == NULL)
+   {
+      printf("Erro ao abrir o arquivo.\n");
+      exit(EXIT_FAILURE);
+   }
+   else {
+   	while(!feof(fp))
+            {
+                fgets(dados, 101, fp);
+                token = strtok(dados, ",");
+                strcpy(codigo_disc,token);
+                
+                if (strcmp(codigo_disc, codigo) == 0)
+                {
+                	found++;
+                	while( token != NULL )
+                    {
+                        token = strtok(NULL, ",");
+                        if (i == 0) strcpy(codigo_prereq, token);
+                        i++;
+                    }
+                    printf("Pre Requisito: %s\n", codigo_prereq);
+
+                    return 0;
+                 }
+             }
+                
+            }
+            if (found == 0)
+            {
+                printf("\nCodigo nao encontrado!\n\n");
+                return 1;
+            }
+            else return 0;
+            fclose(fp);
+   	
+   }
+
 
 int cadastra_aluno(){
     printf("---------------Menu Cadastro de Alunos-------------\n\n");
