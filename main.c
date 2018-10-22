@@ -116,7 +116,7 @@ void prerequisitos (char codigo[8]) {
 
 int cadastra_aluno(){
     printf("---------------Menu Cadastro de Alunos-------------\n\n");
-
+	char lixo[10];
     FILE *fp = fopen("alunos.txt","a");
      if (fp == NULL)
    {
@@ -128,8 +128,10 @@ int cadastra_aluno(){
     char nome[40], user[10], pass[10];
     printf("Digite o RA do Aluno:\n");
     scanf("%d",&ra);
-    printf("Digite o Nome do Aluno:\n");
-    scanf("%s",nome);
+    printf("Digite o Nome do Aluno\n:");
+    gets(lixo);
+	fgets(nome,41,stdin);
+	strtok(nome,"\n");
     printf("Digite o login:\n");
     scanf("%s",user);
     printf("Digite a senha: \n");
