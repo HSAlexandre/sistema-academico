@@ -11,6 +11,34 @@ typedef struct Aluno
     char pass[40];
 }aluno;
 
+int cadastra_aluno(){
+    printf("---------------Menu Cadastro de Alunos-------------\n\n");
+
+    FILE *fp = fopen("alunos.txt","a");
+     if (fp == NULL)
+   {
+      printf("Erro ao abrir o arquivo.\n");
+      exit(EXIT_FAILURE);
+   }
+
+    int ra=0;
+    char nome[40], user[10], pass[10];
+    printf("Digite o RA do Aluno:\n");
+    scanf("%d",&ra);
+    printf("Digite o Nome do Aluno:\n");
+    scanf("%s",nome);
+    printf("Digite o login:\n");
+    scanf("%s",user);
+    printf("Digite a senha: \n");
+    scanf("%s",pass);
+
+    fprintf(fp,"%d %s %s %s\n",ra,nome,user,pass);
+    printf("Usuario cadastrado");
+
+
+
+
+}
 
 int confere_login(char login[10], char senha[10]){
 	FILE *fp = fopen("alunos.txt","r");
@@ -67,10 +95,37 @@ int login_sistema()
 
 int main()
 {
+    int op=0;
      printf("-------- Bem vindo ao Sistema Academico --------\n\n");
      printf("                 Menu inicial\n");
      login_sistema();
      system("cls");
 
      printf("Logado com sucesso!\n");
+     //sleep(1);
+     system("cls");
+
+     while (op == 0)
+     {
+         printf("Menu de opcoes: \n\n");
+         printf("1 - Cadastro de Alunos\n2 - Consulta de Disciplinas\n");
+         printf("Opcao escolhida: ");
+         scanf("%d", &op);
+
+      switch(op)
+      {
+        case 1:
+            {
+             cadastra_aluno();
+             break;
+            }
+        case 2:
+            {
+
+            break;
+
+            }
+        }
+     }
+
 }
