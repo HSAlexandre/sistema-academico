@@ -5,14 +5,36 @@ char Guser[10];
 char Gsenha[10];
 
 
-
-typedef struct Aluno
+int realizar_matricula()
 {
-    int ra;
-    char nome[40];
-    char user[40];
-    char pass[40];
-}aluno;
+        int semestre;
+
+        system("cls");
+        printf("    __________________________________________________________________ \n");
+        printf("   |                 Menu de realizacao de matricula                  |\n");
+        printf("   |                                                                  |\n");
+        printf("   |             Para voltar ao menu anterior, digite 00.             |\n");
+        printf("   |__________________________________________________________________|\n");
+
+        printf("    Digite o semestre: ");
+        scanf("%d", &semestre);
+
+        switch(semestre)
+        {
+            case 00: return 0;
+        }
+
+
+
+/*
+        Digite o semestre: 2
+        Digite a disciplina: SI200
+        Digite a disciplina: AA100
+        Digite a disciplina: XX000
+        Transação efetuada com sucesso
+
+*/
+}
 
 carrega_disciplina(char disc[8])
 {
@@ -175,6 +197,7 @@ int cadastra_aluno(){
      printf("   |__________________________________________________________________|\n");
 	char lixo[10];
     FILE *fp = fopen("alunos.txt","a");
+
      if (fp == NULL)
    {
       printf("    Erro ao abrir o arquivo.\n");
@@ -281,7 +304,8 @@ int login_sistema()
 
 int main()
 {
-	int op = 5;
+	int op = 8;
+	char op1[10];
     char disc[8];
 
      printf("    __________________________________________________________________ \n");
@@ -305,11 +329,13 @@ int main()
          printf("  |                                                                  |\n");
          printf("  |   1 - Cadastro de Alunos                                         |\n");
          printf("  |   2 - Consulta de Disciplinas                                    |\n");
-         printf("  |   3 - Deslogar                                                   |\n");
-         printf("  |   0 - Sair                                                       |\n");
+         printf("  |   3 - Realizar matricula                                         |\n");
+         printf("  |   4 - Deslogar                                                   |\n");
+         printf("  |   5 - Sair                                                       |\n");
          printf("  |__________________________________________________________________|\n\n");
          printf("    Opcao escolhida: ");
-         scanf("%d", &op);
+         scanf("%s", op1);
+         op = atoi(op1);
 
       switch(op)
       {
@@ -344,7 +370,17 @@ int main()
                 system("cls");
                 break;
             }
+
         case 3:
+            {
+                realizar_matricula();
+                printf("\n\n\n");
+                system("pause");
+                system("cls");
+                break;
+            }
+
+        case 4:
             {
                 system("cls");
                  printf("    __________________________________________________________________ \n");
@@ -356,7 +392,7 @@ int main()
                 system("cls");
                 break;
             }
-        case 0:
+        case 5:
             {
               system("cls");
               printf("   __________________________________________________________________ \n");
@@ -367,6 +403,5 @@ int main()
               exit(1);
             }
         }
-     }
-
+    }
 }
