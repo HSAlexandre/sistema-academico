@@ -64,7 +64,8 @@ int realizar_matricula()
                             token = strtok(NULL,",");
                             if (cont == 0) strcpy (disc, token);
                             if (cont == 1) strcpy (arq_sem, token);
-                            if (cont == 2) strcpy (nota, token);
+                            if
+                                (cont == 2) strcpy (nota, token);
                             if (cont == 3) strcpy (falta, token);
                             cont++;
                         }
@@ -74,8 +75,9 @@ int realizar_matricula()
                         {
                             printf("entrei na disciplina certa\n\n");
                             found++;
-                            fprintf(fp, "\n");
-                            fprintf(fp,"%s,%s,%s,%s,%s", ra, cod_disc, semestre, nota1, falta1);
+                            fprintf(fp,"\n");
+                            fprintf(fp,"%s,%s,%s,%s,%s",ra,cod_disc,semestre,nota1,falta1);
+                            printf("found = %d", found);
                         }
                     }
                  }
@@ -85,18 +87,20 @@ int realizar_matricula()
                      printf("Essa disciplina ainda nao pode ser cursada por voce. Verifique se voce ja concluiu o pre requisito para essa disciplina.\n");
                  }
             }
-
+            printf("se fui printado eh pq o arquivo foi fechado\n");
+            fclose(fp);
             printf("Transacao efetuada com sucesso! \n");
             return 0;
         }
 }
 
 
-void codigo_prereq (char codigo[8]) {
+char * codigo_prereq(char codigo[8])
+{
 	FILE * fp = fopen("Prerequisitos.txt", "r");
 	char dados[100];
 	char codigo_disc[8];
-	char codigo_prereq[8];
+	char code_prereq[8];
 	int found = 0;
 	char *token;
 	int i = 0;
@@ -120,14 +124,14 @@ void codigo_prereq (char codigo[8]) {
                 	while( token != NULL )
                     {
                         token = strtok(NULL, ",");
-                        if (i == 0) strcpy(codigo_prereq, token);
+                        if (i == 0) strcpy(code_prereq, token);
                         i++;
                     }
 
-                    token = strtok(codigo_prereq, "\n");
-                    strcpy(codigo_prereq, token);
+                    token = strtok(code_prereq, "\n");
+                    strcpy(code_prereq, token);
 
-                    return codigo_prereq;
+                    return code_prereq;
                  }
              }
             }
