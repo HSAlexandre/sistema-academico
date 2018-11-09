@@ -5,15 +5,24 @@ char Guser[10];
 char Gsenha[10];
 char Gra[8];
 
+int realizar_matricula();
+char * codigo_prereq(char codigo[8]);
+int carrega_disciplina(char disc[8]);
+char * prerequisitos (char codigo[8]);
+void nome_prered_disc(char disc[8]);
+int cadastra_aluno();
+int login_sistema();
+int confere_login(char login[10], char senha[10]);
 
 int realizar_matricula()
 {
         FILE *fp = fopen("AlunosDisciplinas.txt", "a+");
         char semestre[2];
-        char dados[100], ra[8], disc[8], arq_sem[2], nota[3], falta[3], codigo_prereqq[8];
+        char dados[100], ra[8], disc[8], arq_sem[2], nota[3], falta[3], * codigo_prereqq[8];
         char cod_disc[8], nota1[] = "10", falta1[] = "100";
         char *token;
         char *token1;
+        char * teste[100];
         int cont = 0, found = 0;
 
         system("cls");
@@ -43,7 +52,8 @@ int realizar_matricula()
             {
                  printf("Digite o codigo da disciplina: ");
                  scanf("%s", cod_disc);
-                 strcpy(codigo_prereqq,codigo_prereq(cod_disc));
+
+                 strcpy(codigo_prereqq ,codigo_prereq(cod_disc));
                  printf("CODIGO DISCIPLINA: %s\n\n", codigo_prereqq);
 
 
@@ -81,7 +91,7 @@ int realizar_matricula()
                         }
                     }
                  }
-
+                    printf("cheguei aqui ");
                  if (found == 0)
                  {
                      printf("Essa disciplina ainda nao pode ser cursada por voce. Verifique se voce ja concluiu o pre requisito para essa disciplina.\n");
@@ -95,7 +105,7 @@ int realizar_matricula()
 }
 
 
-char * codigo_prereq(char codigo[8])
+char *  codigo_prereq(char codigo[8])
 {
 	FILE * fp = fopen("Prerequisitos.txt", "r");
 	char dados[100];
@@ -130,7 +140,6 @@ char * codigo_prereq(char codigo[8])
 
                     token = strtok(code_prereq, "\n");
                     strcpy(code_prereq, token);
-
                     return code_prereq;
                  }
              }
@@ -138,13 +147,12 @@ char * codigo_prereq(char codigo[8])
             if (found == 0)
             {
                 printf("    Disciplina nao encontrada.\n\n");
-                return 1;
+
             }
-            else return 0;
             fclose(fp);
    }
 
-carrega_disciplina(char disc[8])
+int carrega_disciplina(char disc[8])
 {
     FILE * fp = fopen("Disciplinas.txt", "r");
     char nome_disc[40];
@@ -199,7 +207,7 @@ carrega_disciplina(char disc[8])
    }
 }
 
-void prerequisitos (char codigo[8]) {
+char * prerequisitos (char codigo[8]) {
 	FILE * fp = fopen("Prerequisitos.txt", "r");
 	char dados[100];
 	char codigo_disc[8];
@@ -242,9 +250,8 @@ void prerequisitos (char codigo[8]) {
             if (found == 0)
             {
                 printf("    Sem pre requisito.\n\n");
-                return 1;
+
             }
-            else return 0;
             fclose(fp);
    }
 
