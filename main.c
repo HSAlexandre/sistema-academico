@@ -5,6 +5,15 @@ char Guser[10];
 char Gsenha[10];
 char Gra[8];
 
+typedef struct aux{
+	char ra[8];
+	char sigla[8];
+	char sem[2];
+	char nota[3];
+	char falta[3];
+}ax;	
+
+
 int realizar_matricula();
 char * codigo_prereq(char codigo[8]);
 int carrega_disciplina(char disc[8]);
@@ -13,13 +22,102 @@ void nome_prered_disc(char disc[8]);
 int cadastra_aluno();
 int login_sistema();
 int confere_login(char login[10], char senha[10]);
+int alterar_nota();
 
+int alterar_nota(){
+	char ra[8],cod_disc[8],falta[3],nota[3],disc[8],dados[100];
+	int cont=0,cont2=0,cont3=0;
+	char * token;
+	ax* a;
+	FILE * fp = fopen("AlunosDisciplinas.txt","r");
+	 
+	 
+	 if (fp == NULL)
+        {
+            printf("    Erro ao abrir o arquivo.");
+            exit(EXIT_FAILURE);
+        }
+		while(!feof(fp))
+		{
+			fgets(dados,101,fp);
+			cont2++;
+			printf("%d\n", cont2);
+		}
+		fclose(fp);
+		   //ax a [cont2];	   	
+		a = malloc (cont2*sizeof(ax));
+	    fp = fopen("AlunosDisciplinas.txt","r");
+		
+		 while(!feof(fp))
+                 {
+                    fgets(dados, 101, fp);
+					printf("%s",dados);
+                    token = strtok(dados, ",");
+                    strcpy(a[cont3].ra, token);
+                    
+					
+                    
+                        cont = 0;
+                        
+                        
+						while(token != NULL)//RA, COD DISC, SEMEST, NOT, FALTA
+                        {
+                            token = strtok(NULL,",");
+                            if (cont == 0){ 
+							strcpy (a[cont3].sigla, token);
+							cont3--;
+							}
+                            if (cont == 1){ strcpy (a[cont3].sem, token); cont3--;}
+                            if (cont == 2){ strcpy (a[cont3].nota, token); cont3--;}
+                            if (cont == 3) strcpy (a[cont3].falta, token);
+                            cont++;
+                            cont3++;
+                    
+						}
+						
+			}
+						
+						
+						printf("Digite o codigo da disciplina ");
+						scanf("%s",disc);
+						printf("Digite a nota para alterar ");
+						scanf("%s",nota);
+						printf("Digite a falta para alterar ");
+						scanf("%s",falta);
+						
+						
+						
+		    
+					for(cont=0;cont<cont2;cont++){
+						if(((strcmp(Gra,a[cont].ra))==0)&&((strcmp(disc,a[cont].sigla)==0))){
+							strcpy(a[cont].nota,nota);
+							strcpy(a[cont].falta,falta);
+							
+						}
+							
+						
+					}	
+					
+					
+					fclose(fp);
+					fp= fopen("AlunosDisciplinas.txt","w");
+					
+									
+					for(cont=0;cont<cont2;cont++){
+						fprintf(fp,"%s,%s,%s,%s,%s\n",a[cont].ra,a[cont].sigla,a[cont].sem,a[cont].nota,a[cont].falta);
+						
+					}
+					fclose(fp);
+					
+					printf("Nota alterada\n");
+	
+}
 int realizar_matricula()
 {
-        FILE *fp = fopen("AlunosDisciplinas.txt", "a+");
+        FILE *fp = fopen("AlunosDisciplinas.txt","r");
         char semestre[2];
-        char dados[100], ra[8], disc[8], arq_sem[2], nota[3], falta[3], * codigo_prereqq[8];
-        char cod_disc[8], nota1[] = "10", falta1[] = "100";
+        char dados[100], ra[8], disc[8], arq_sem[2], nota[4], falta[3], * codigo_prereqq[8], notalixo[3];
+        char cod_disc[8], nota1[] = "0", falta1[] = "0";
         char *token;
         char *token1;
         char * teste[100];
@@ -54,50 +152,66 @@ int realizar_matricula()
                  scanf("%s", cod_disc);
 
                  strcpy(codigo_prereqq ,codigo_prereq(cod_disc));
-                 printf("CODIGO DISCIPLINA: %s\n\n", codigo_prereqq);
 
 
                  while(!feof(fp))
                  {
+                 	cont = 0;
                     fgets(dados, 101, fp);
-                    printf("DADOS DO FGETS: %s\n", dados);
 
                     token = strtok(dados, ",");
                     strcpy(ra, token);
-                    printf("RA: %s\n", ra);
-                    if (strcmp(ra, Gra) == 0)
+                    
+					if (strcmp(ra, Gra) == 0)
                     {
-                        printf("entrei no ra certo \n\n");
-                        cont = 0;
                         while(token != NULL)//RA, COD DISC, SEMEST, NOT, FALTA
                         {
                             token = strtok(NULL,",");
                             if (cont == 0) strcpy (disc, token);
                             if (cont == 1) strcpy (arq_sem, token);
-                            if
-                                (cont == 2) strcpy (nota, token);
-                            if (cont == 3) strcpy (falta, token);
+                            if (cont == 2) 
+							{
+								strcpy (nota, token);
+								strcpy(notalixo, nota);
+							}
+                            if (cont == 3)
+							{
+								   strcpy (falta, token);
+								   token1 = strtok(falta,"\n");	
+								   strcpy(falta, token1);
+							}
                             cont++;
                         }
-                        printf("disciplina: %s\nsemestre: %s\nnota: %s\nfalta: %s\n", disc, arq_sem, nota, falta);
-
+                        if (strcmp(codigo_prereqq,"1") == 0)
+                 	{
+								  strcpy(codigo_prereqq, disc);			 
+					}
+                        
+     
                         if (strcmp(codigo_prereqq, disc)== 0)
                         {
-                            printf("entrei na disciplina certa\n\n");
-                            found++;
-                            fprintf(fp,"\n");
-                            fprintf(fp,"%s,%s,%s,%s,%s",ra,cod_disc,semestre,nota1,falta1);
-                            printf("found = %d", found);
-                        }
-                    }
-                 }
-                    printf("cheguei aqui ");
+      	                    int notaint = atoi(notalixo);
+                        	int faltaint = atoi(falta);
+                        	if ((notaint>=6) && (faltaint>=75))
+							{
+	                        	FILE * fp2 = fopen("AlunosDisciplinas.txt","a");
+	                            found++;
+	                            
+	                            fprintf(fp2,"\n%s,%s,%s,%s,%s",ra,cod_disc,semestre,nota1,falta1);
+	                 	       fclose(fp2);  
+							} 
+						}
+                 	       
+                    	
+						}
+                 
+   				 }
+
                  if (found == 0)
                  {
                      printf("Essa disciplina ainda nao pode ser cursada por voce. Verifique se voce ja concluiu o pre requisito para essa disciplina.\n");
                  }
             }
-            printf("se fui printado eh pq o arquivo foi fechado\n");
             fclose(fp);
             printf("Transacao efetuada com sucesso! \n");
             return 0;
@@ -108,7 +222,7 @@ int realizar_matricula()
 char *  codigo_prereq(char codigo[8])
 {
 	FILE * fp = fopen("Prerequisitos.txt", "r");
-	char dados[100];
+	char dados[100], um[]="1";
 	char codigo_disc[8];
 	char code_prereq[8];
 	int found = 0;
@@ -146,8 +260,7 @@ char *  codigo_prereq(char codigo[8])
             }
             if (found == 0)
             {
-                printf("    Disciplina nao encontrada.\n\n");
-
+                return um;
             }
             fclose(fp);
    }
@@ -286,8 +399,9 @@ char * prerequisitos (char codigo[8]) {
 
                 //Separando a string
                 token = strtok(dados, ",");
-                strcpy(codigo_disc,token);
-
+                strcpy(codigo_disc,token);	
+                
+                
                 if (strcmp(codigo_disc, disc) == 0)
                 {
                     found++;
@@ -446,8 +560,9 @@ int main()
          printf("  |   1 - Cadastro de Alunos                                         |\n");
          printf("  |   2 - Consulta de Disciplinas                                    |\n");
          printf("  |   3 - Realizar matricula                                         |\n");
-         printf("  |   4 - Deslogar                                                   |\n");
-         printf("  |   5 - Sair                                                       |\n");
+         printf("  |   4 - Alterar Notas                                              |\n");
+		 printf("  |   5 - Deslogar                                                   |\n");
+         printf("  |   6 - Sair                                                       |\n");
          printf("  |__________________________________________________________________|\n\n");
          printf("    Opcao escolhida: ");
          scanf("%s", op1);
@@ -495,8 +610,23 @@ int main()
                 system("cls");
                 break;
             }
-
         case 4:
+			{
+                system("cls");
+                 printf("    __________________________________________________________________ \n");
+                 printf("   |                	Alteracao de Notas                             |\n");
+                 printf("   |__________________________________________________________________|\n");
+                alterar_nota();
+                system("cls");
+                break;
+            }
+			
+			
+			
+			
+			
+		
+        case 5:
             {
                 system("cls");
                  printf("    __________________________________________________________________ \n");
@@ -508,7 +638,7 @@ int main()
                 system("cls");
                 break;
             }
-        case 5:
+        case 6:
             {
               system("cls");
               printf("   __________________________________________________________________ \n");
@@ -518,6 +648,8 @@ int main()
               printf("  |__________________________________________________________________|\n");
               exit(1);
             }
-        }
+		
+		
+		}
     }
 }
